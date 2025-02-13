@@ -1,8 +1,10 @@
+import os
 from selene import browser, have, be
 
 
 def test_fill_registration_form_with_mandatory_values():
-    browser.open('/')
+    browser.open('/automation-practice-form')
+    browser.element('footer').execute_script('element.remove()')
     browser.element('#firstName').should(be.blank)
 
     browser.element('#firstName').type('my_firstName')
@@ -26,7 +28,8 @@ def test_fill_registration_form_with_mandatory_values():
 
 
 def test_send_registration_form_with_all_values():
-    browser.open('/')
+    browser.open('/automation-practice-form')
+    browser.element('footer').execute_script('element.remove()')
     browser.element('#firstName').should(be.blank)
 
     browser.element('#firstName').type('my_firstName')
@@ -42,6 +45,7 @@ def test_send_registration_form_with_all_values():
 
     browser.element('#subjectsInput').type('hindi').press_enter().type('maths').press_enter()
     browser.element('#hobbies-checkbox-1 + .custom-control-label').click()
+    browser.element('#uploadPicture').type(os.path.abspath('resources/python.png'))
     browser.element('#currentAddress').type('my_curr_address')
 
     browser.element('#state').click().all("#state div").element_by(have.exact_text("Uttar Pradesh")).click()
@@ -52,13 +56,14 @@ def test_send_registration_form_with_all_values():
     browser.element('#example-modal-sizes-title-lg').should(have.text('Thanks for submitting the form'))
     browser.element('.table').all('td:nth-child(2)').should(have.texts(
         'my_firstName my_secondName', 'my_email@mail.com', 'Male', '8999123456', '21 June,2013',
-        'Hindi, Maths', '', '', 'my_curr_address', 'Uttar Pradesh Merrut'))
+        'Hindi, Maths', 'Sports', 'python.png', 'my_curr_address', 'Uttar Pradesh Merrut'))
     browser.element('#closeLargeModal').should(be.visible).click()
     browser.element('#firstName').should(be.blank)
 
 
 def test_send_empty_registration_form():
-    browser.open('/')
+    browser.open('/automation-practice-form')
+    browser.element('footer').execute_script('element.remove()')
     browser.element('#firstName').should(be.blank)
     browser.element('#submit').should(be.visible).click()
     browser.element('#example-modal-sizes-title-lg').should((have.no.text('Thanks for submitting the form')))
