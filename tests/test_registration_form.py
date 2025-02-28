@@ -1,69 +1,55 @@
-import os
-from selene import browser, have, be
+from qa_guru_python_18_9.data.users import user_with_all_values, user_with_mandatory_values
+from qa_guru_python_18_9.pages.registration_page import RegistrationPage
 
 
 def test_fill_registration_form_with_mandatory_values():
-    browser.open('/automation-practice-form')
-    browser.element('footer').execute_script('element.remove()')
-    browser.element('#firstName').should(be.blank)
-
-    browser.element('#firstName').type('my_firstName')
-    browser.element('#lastName').type('my_secondName')
-    browser.element('#gender-radio-1 + .custom-control-label').click()
-    browser.element('#userNumber').type('8999123456')
-
-    browser.element('#dateOfBirthInput').click()
-    browser.element('.react-datepicker__year-select').click().element('[value="2013"]').click()
-    browser.element('.react-datepicker__month-select').click().element('[value="5"]').click()
-    browser.element('.react-datepicker__day--021').click()
-
-    browser.element('#submit').should(be.visible).click()
-
-    browser.element('#example-modal-sizes-title-lg').should(have.text('Thanks for submitting the form'))
-    browser.element('.table').all('td:nth-child(2)').should(have.texts(
-        'my_firstName my_secondName', '', 'Male', '8999123456', '21 June,2013', '', '', '', '', ''))
-
-    browser.element('#closeLargeModal').should(be.visible).click()
-    browser.element('#firstName').should(be.blank)
+    registration_page = RegistrationPage()
+    (registration_page.open()
+     .register(user_with_mandatory_values)
+     .should_have_text('Thanks for submitting the form')
+     .should_have_registered('my_firstName', 'my_secondName', '', 'Male', '8999123456', '21 June,2013', '', '', '', '',
+                             '', '')
+     .click_close_button()
+     .should_be_blank('firstName'))
 
 
 def test_send_registration_form_with_all_values():
-    browser.open('/automation-practice-form')
-    browser.element('footer').execute_script('element.remove()')
-    browser.element('#firstName').should(be.blank)
+    registration_page = RegistrationPage()
+    (registration_page.open()
+     .fill_first_name('my_firstName')
+     .fill_last_name('my_secondName')
+     .fill_email('my_email@mail.com')
+     .set_male_gender()
+     .fill_mobile_number('8999123456')
+     .fill_date_of_birth(2013, 'June', 21)
+     .fill_subject('Hindi')
+     .fill_subject('Maths')
+     .set_sport_hobbie()
+     .set_upload_picture('resources/python.png')
+     .fill_current_address('my_curr_address')
+     .fill_state('NCR')
+     .fill_city('Delhi')
+     .click_submit_button()
+     .should_have_text('Thanks for submitting the form')
+     .should_have_registered('my_firstName', 'my_secondName', 'my_email@mail.com', 'Male', '8999123456', '21 June,2013',
+                             'Hindi, Maths', 'Sports', 'python.png', 'my_curr_address', 'NCR', 'Delhi')
+     .click_close_button()
+     .should_be_blank('firstName'))
 
-    browser.element('#firstName').type('my_firstName')
-    browser.element('#lastName').type('my_secondName')
-    browser.element('#userEmail').type('my_email@mail.com')
-    browser.element('#gender-radio-1 + .custom-control-label').click()
-    browser.element('#userNumber').type('8999123456')
 
-    browser.element('#dateOfBirthInput').click()
-    browser.element('.react-datepicker__year-select').click().element('[value="2013"]').click()
-    browser.element('.react-datepicker__month-select').click().element('[value="5"]').click()
-    browser.element('.react-datepicker__day--021').click()
-
-    browser.element('#subjectsInput').type('hindi').press_enter().type('maths').press_enter()
-    browser.element('#hobbies-checkbox-1 + .custom-control-label').click()
-    browser.element('#uploadPicture').type(os.path.abspath('resources/python.png'))
-    browser.element('#currentAddress').type('my_curr_address')
-
-    browser.element('#state').click().all("#state div").element_by(have.exact_text("Uttar Pradesh")).click()
-    browser.element('#city').click().all("#city div").element_by(have.exact_text("Merrut")).click()
-
-    browser.element('#submit').should(be.visible).click()
-
-    browser.element('#example-modal-sizes-title-lg').should(have.text('Thanks for submitting the form'))
-    browser.element('.table').all('td:nth-child(2)').should(have.texts(
-        'my_firstName my_secondName', 'my_email@mail.com', 'Male', '8999123456', '21 June,2013',
-        'Hindi, Maths', 'Sports', 'python.png', 'my_curr_address', 'Uttar Pradesh Merrut'))
-    browser.element('#closeLargeModal').should(be.visible).click()
-    browser.element('#firstName').should(be.blank)
+def test_send_registration_form_with_all_values_short():
+    registration_page = RegistrationPage()
+    (registration_page.open()
+     .register(user_with_all_values)
+     .should_have_text('Thanks for submitting the form')
+     .should_have_registered(user_with_all_values)
+     .click_close_button()
+     .should_be_blank('firstName'))
 
 
 def test_send_empty_registration_form():
-    browser.open('/automation-practice-form')
-    browser.element('footer').execute_script('element.remove()')
-    browser.element('#firstName').should(be.blank)
-    browser.element('#submit').should(be.visible).click()
-    browser.element('#example-modal-sizes-title-lg').should((have.no.text('Thanks for submitting the form')))
+    registration_page = RegistrationPage()
+    (registration_page.open()
+     .should_be_blank('firstName')
+     .click_submit_button()
+     .should_have_no_text('Thanks for submitting the form'))
