@@ -21,8 +21,8 @@ class RegistrationPage:
         self.upload_picture = browser.element('#uploadPicture')
         self.current_address = browser.element('#currentAddress')
 
-        self.state = browser.element('#currentAddress')
-        self.city = browser.element('#currentAddress')
+        self.state = browser.element('#state')
+        self.city = browser.element('#city')
 
     def open(self):
         browser.open('/automation-practice-form')
@@ -30,54 +30,54 @@ class RegistrationPage:
         return self
 
     def fill_first_name(self, value):
-        browser.element('#firstName').type(value)
+        self.first_name.type(value)
         return self
 
     def fill_last_name(self, value):
-        browser.element('#lastName').type(value)
+        self.last_name.type(value)
         return self
 
     def fill_email(self, value):
-        browser.element('#userEmail').type(value)
+        self.email.type(value)
         return self
 
     def set_male_gender(self):
-        browser.element('#gender-radio-1 + .custom-control-label').click()
+        self.gender.click()
         return self
 
     def fill_mobile_number(self, value):
-        browser.element('#userNumber').type(value)
+        self.user_number.type(value)
         return self
 
     def fill_date_of_birth(self, year, month, day):
-        browser.element('#dateOfBirthInput').click()
-        browser.element('.react-datepicker__year-select').type(year)
-        browser.element('.react-datepicker__month-select').type(month)
-        browser.element(f'.react-datepicker__day--0{day}').click()
+        self.date_of_birth_input.click()
+        self.year.type(year)
+        self.month.type(month)
+        self.day.click()
         return self
 
     def fill_subject(self, value):
-        browser.element('#subjectsInput').type(value).press_enter()
+        self.subjects_input.type(value).press_enter()
         return self
 
     def set_sport_hobbie(self):
-        browser.element('#hobbies-checkbox-1 + .custom-control-label').click()
+        self.hobbies.click()
         return self
 
     def set_upload_picture(self, value):
-        browser.element('#uploadPicture').type(os.path.abspath(value))
+        self.upload_picture.type(os.path.abspath(value))
         return self
 
     def fill_current_address(self, value):
-        browser.element('#currentAddress').type(value)
+        self.current_address.type(value)
         return self
 
     def fill_state(self, value):
-        browser.element('#state').click().all("#state div").element_by(have.exact_text(value)).click()
+        self.state.click().all("#state div").element_by(have.exact_text(value)).click()
         return self
 
     def fill_city(self, value):
-        browser.element('#city').click().all("#city div").element_by(have.exact_text(value)).click()
+        self.city.click().all("#city div").element_by(have.exact_text(value)).click()
         return self
 
     def click_submit_button(self):
@@ -102,7 +102,6 @@ class RegistrationPage:
     def should_have_text(self, value):
         browser.element('#example-modal-sizes-title-lg').should(have.text(value))
         return self
-
 
     def should_have_no_text(self, value):
         browser.element('#example-modal-sizes-title-lg').should((have.no.text(value)))
