@@ -17,7 +17,7 @@ class RegistrationPage:
         self.day = browser.element('.react-datepicker__day--021')
 
         self.subjects_input = browser.element('#subjectsInput')
-        self.hobbies = browser.element('#hobbies-checkbox-1 + .custom-control-label')
+        self.hobbies = browser.all(".custom-control-label")
         self.upload_picture = browser.element('#uploadPicture')
         self.current_address = browser.element('#currentAddress')
 
@@ -41,8 +41,8 @@ class RegistrationPage:
         self.email.type(value)
         return self
 
-    def set_male_gender(self):
-        self.gender.click()
+    def select_gender(self, value):
+        browser.element(f'[value={value}]').element('..').click()
         return self
 
     def fill_mobile_number(self, value):
@@ -60,8 +60,8 @@ class RegistrationPage:
         self.subjects_input.type(value).press_enter()
         return self
 
-    def set_sport_hobbie(self):
-        self.hobbies.click()
+    def select_hobby(self, value):
+        self.hobbies.element_by(have.text(value)).click()
         return self
 
     def set_upload_picture(self, value):
