@@ -26,6 +26,9 @@ class RegistrationPage:
 
     def open(self):
         browser.open('/automation-practice-form')
+        return self
+
+    def remove_banner(self):
         browser.element('footer').execute_script('element.remove()')
         return self
 
@@ -51,9 +54,9 @@ class RegistrationPage:
 
     def fill_date_of_birth(self, year, month, day):
         self.date_of_birth_input.click()
-        self.year.type(year)
-        self.month.type(month)
-        self.day.click()
+        self.year.click().element(f'[value="{year}"]').click()
+        self.month.click().element(f'[value="{month}"]').click()
+        browser.element(f'.react-datepicker__day--0{day}').click()
         return self
 
     def fill_subject(self, value):
@@ -93,16 +96,4 @@ class RegistrationPage:
 
     def click_close_button(self):
         browser.element('#closeLargeModal').should(be.visible).click()
-        return self
-
-    def should_be_blank(self, value):
-        browser.element(f'#{value}').should(be.blank)
-        return self
-
-    def should_have_text(self, value):
-        browser.element('#example-modal-sizes-title-lg').should(have.text(value))
-        return self
-
-    def should_have_no_text(self, value):
-        browser.element('#example-modal-sizes-title-lg').should((have.no.text(value)))
         return self
