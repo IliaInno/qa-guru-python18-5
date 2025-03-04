@@ -14,7 +14,6 @@ class RegistrationPage:
         self.date_of_birth_input = browser.element('#dateOfBirthInput')
         self.year = browser.element('.react-datepicker__year-select')
         self.month = browser.element('.react-datepicker__month-select')
-        self.day = browser.element('.react-datepicker__day--021')
 
         self.subjects_input = browser.element('#subjectsInput')
         self.hobbies = browser.all(".custom-control-label")
